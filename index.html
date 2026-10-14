@@ -25,6 +25,7 @@
   --hero:#1B3AA8; --on-hero:#FFFFFF; --hero-warn:#FFD0C9;
   --in:#0F7648; --in-soft:#DCF1E5; --out:#BC3830; --out-soft:#FAE3E0; --plan:#9C5A00; --plan-soft:#FBEED7;
   --shadow:rgba(15,25,50,.10); --scrim:rgba(10,14,25,.45);
+  --t1:#A5622C; --t2:#74839A; --t3:#B07F06; --t4a:#2347C4; --t4b:#0F7648; --medal-ink:#FFFFFF;
   --f-display:"Unbounded","Manrope",system-ui,sans-serif;
   --f-body:"Manrope",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
   --r:14px;
@@ -34,13 +35,15 @@
   --accent:#7D9BFF; --accent-soft:#1E2950; --on-accent:#0C111B;
   --hero:#213685; --on-hero:#FFFFFF; --hero-warn:#FFC2B9;
   --in:#48C990; --in-soft:#13301F; --out:#FF7C71; --out-soft:#3A1C1A; --plan:#F1A93D; --plan-soft:#392A11;
-  --shadow:rgba(0,0,0,.35); --scrim:rgba(0,0,0,.6); color-scheme:dark}}
+  --shadow:rgba(0,0,0,.35); --scrim:rgba(0,0,0,.6);
+  --t1:#D39461; --t2:#A9B6CB; --t3:#E6B83A; --t4a:#7D9BFF; --t4b:#48C990; --medal-ink:#0C111B; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0C111B; --surface:#151C29; --sunk:#1D2534; --ink:#E6EAF2; --muted:#98A3B9; --line:#273145;
   --accent:#7D9BFF; --accent-soft:#1E2950; --on-accent:#0C111B;
   --hero:#213685; --on-hero:#FFFFFF; --hero-warn:#FFC2B9;
   --in:#48C990; --in-soft:#13301F; --out:#FF7C71; --out-soft:#3A1C1A; --plan:#F1A93D; --plan-soft:#392A11;
-  --shadow:rgba(0,0,0,.35); --scrim:rgba(0,0,0,.6); color-scheme:dark}
+  --shadow:rgba(0,0,0,.35); --scrim:rgba(0,0,0,.6);
+  --t1:#D39461; --t2:#A9B6CB; --t3:#E6B83A; --t4a:#7D9BFF; --t4b:#48C990; --medal-ink:#0C111B; color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
@@ -137,7 +140,8 @@ h2{font-family:var(--f-display);font-weight:600;font-size:14.5px;letter-spacing:
 .chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
 .fc{display:flex;flex-direction:column;gap:7px}
 .fc-line{display:flex;justify-content:space-between;gap:12px;font-size:14px}
-.fc-line span:last-child{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.fc-line span:last-child{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap;text-align:right}
+.fc-line span.rk{white-space:normal}
 .fc-total{border-top:1px dashed var(--line);padding-top:10px;margin-top:3px;align-items:baseline}
 .fc-total span:last-child{font-family:var(--f-display);font-size:21px;font-weight:600}
 .neg{color:var(--out)!important}
@@ -185,13 +189,52 @@ textarea.inp{min-height:120px;font-size:13px;font-family:ui-monospace,Menlo,mono
 
 /* Панель вкладок */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:1px solid var(--line);padding:6px max(16px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-.tabbar-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.tabbar-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+/* Достижения */
+.rank-hero{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center}
+.rank-hero .medal{width:84px;height:84px;font-size:30px}
+.rank-hero .k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--muted)}
+.rank-hero .nm{font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1.15;text-wrap:balance}
+.rank-hero .s{font-size:13.5px;color:var(--muted);margin-top:2px}
+.prog{display:flex;flex-direction:column;gap:6px}
+.prog .track{height:12px}
+.prog .fill{background:var(--plan)}
+.prog-line{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);font-weight:600}
+.ladder{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+.step:first-child{border-top:0}
+.step .medal{width:44px;height:44px;font-size:16px}
+.step .nm{font-weight:800}
+.step .th{font-size:13px;color:var(--muted)}
+.step .cnt{font-weight:800;font-variant-numeric:tabular-nums;font-size:14px;text-align:right}
+.step.locked .nm{color:var(--muted)}
+.step.next{background:var(--plan-soft)}
+.medal.mini-medal{width:28px;height:28px;font-size:11px;box-shadow:none}
+.hist{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+.hist:first-child{border-top:0}
+.hist .nm{font-weight:700}
+.hist .dt{font-size:13px;color:var(--muted)}
+.hist .v{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.rank-line{font-size:13.5px;margin-top:6px;opacity:.95}
+.rank-line button{border:0;background:rgba(255,255,255,.16);color:inherit;border-radius:999px;padding:3px 10px;font-weight:800;font-size:13px}
 .tb{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:6px 4px;font-size:11.5px;font-weight:800;color:var(--muted);border-radius:12px}
 .tb svg{width:22px;height:22px}
 .tb.on{color:var(--accent);background:var(--accent-soft)}
 .toast{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:calc(78px + env(safe-area-inset-bottom,0px));width:calc(100% - 32px);max-width:520px;background:var(--ink);color:var(--bg);border-radius:12px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;font-size:14px;box-shadow:0 6px 20px var(--shadow)}
 .toast button{border:0;background:none;color:inherit;text-decoration:underline;font-weight:800;padding:2px 4px}
-@media (prefers-reduced-motion: reduce){.sheet{animation:none}}
+/* Звания */
+.small{font-size:13px;line-height:1.4}
+.medal{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:17px;color:var(--medal-ink);background:var(--t1);box-shadow:inset 0 0 0 3px rgba(255,255,255,.28),0 2px 6px var(--shadow)}
+.medal.t2{background:var(--t2)} .medal.t3{background:var(--t3)} .medal.t4{background:linear-gradient(135deg,var(--t4a),var(--t4b))}
+.medal.locked{background:var(--sunk);color:var(--muted);box-shadow:inset 0 0 0 2px var(--line)}
+.award{position:fixed;z-index:22;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(100% - 40px);max-width:360px;background:var(--surface);border-radius:24px;padding:26px 22px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;box-shadow:0 20px 50px var(--shadow);animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:translate(-50%,-50%) scale(.8);opacity:0}}
+.award .medal{width:92px;height:92px;font-size:34px;margin-bottom:6px}
+.aw-k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--accent)}
+.aw-name{font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1.2;text-wrap:balance}
+.aw-text{color:var(--muted);font-size:14px;margin-bottom:8px}
+.award .btn{width:100%}
+@media (prefers-reduced-motion: reduce){.sheet,.award{animation:none}}
 </style>
 </head>
 <body>
@@ -213,6 +256,7 @@ textarea.inp{min-height:120px;font-size:13px;font-family:ui-monospace,Menlo,mono
       <div class="label">На балансе сейчас</div>
       <div class="big" id="bal"></div>
       <div class="sub" id="heroSub"></div>
+      <div class="rank-line" id="heroRank" hidden></div>
     </div>
     <div class="quick">
       <button class="qbtn in" data-add="in" type="button">+ Доход</button>
@@ -291,12 +335,32 @@ textarea.inp{min-height:120px;font-size:13px;font-family:ui-monospace,Menlo,mono
     </div>
     <button class="btn danger" id="wipe" type="button">Удалить все данные</button>
   </section>
+
+  <!-- НАГРАДЫ -->
+  <section class="tab" id="tab-awards" hidden>
+    <div id="awNoSal" class="onb" hidden>
+      <p><b>Укажите, когда приходит зарплата</b><br><span class="muted">Звание выдаётся в день зарплаты: сколько денег осталось на счету накануне, такое звание вы и получаете. Чем больше удалось сохранить до зарплаты, тем выше звание.</span></p>
+      <button class="btn primary" data-add="salary" type="button">Добавить зарплату</button>
+      <div class="muted" style="font-size:13px">Если зарплата уже внесена как доход, откройте её и отметьте «Это зарплата».</div>
+    </div>
+    <div id="awMain">
+      <div class="tab">
+        <div class="rank-hero" id="awHero"></div>
+        <div class="card" id="awNow"></div>
+        <h2>Лестница званий</h2>
+        <div class="list ladder" id="awLadder"></div>
+        <h2>История</h2>
+        <div class="list" id="awHist"></div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <nav class="tabbar" aria-label="Разделы">
   <div class="tabbar-in">
     <button class="tb on" data-tab="today" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16 15h2"/></svg>Сегодня</button>
     <button class="tb" data-tab="cal" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Календарь</button>
+    <button class="tb" data-tab="awards" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 16v5M7 3h10v6a5 5 0 0 1-10 0V3zM7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>Награды</button>
     <button class="tb" data-tab="stats" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Анализ</button>
   </div>
 </nav>
@@ -316,6 +380,7 @@ textarea.inp{min-height:120px;font-size:13px;font-family:ui-monospace,Menlo,mono
   </div>
   <label class="fld">Дата<input class="inp" type="date" id="fDate"></label>
   <label class="chk" id="repWrap"><input type="checkbox" id="fRep">Повторять каждый месяц</label>
+  <label class="chk" id="salWrap"><input type="checkbox" id="fSal">Это зарплата (для званий)</label>
   <label class="fld">Описание<input class="inp" id="fNote" autocomplete="off" placeholder="Кредит, продукты, зарплата…"></label>
   <div class="err" id="shErr"></div>
   <div class="sheet-actions">
@@ -324,6 +389,13 @@ textarea.inp{min-height:120px;font-size:13px;font-family:ui-monospace,Menlo,mono
     <button class="btn primary" type="submit">Сохранить</button>
   </div>
 </form>
+<div class="award" id="award" hidden role="dialog" aria-modal="true" aria-labelledby="awName">
+  <div id="awMedal"></div>
+  <div class="aw-k" id="awK"></div>
+  <div class="aw-name" id="awName"></div>
+  <div class="aw-text" id="awText"></div>
+  <button class="btn primary" type="button" id="awOk">Отлично</button>
+</div>
 <div class="toast" id="toast" hidden><span id="toastMsg"></span><button type="button" id="toastUndo">Отменить</button></div>
 
 <script>
@@ -354,6 +426,7 @@ const signed=(n,type)=>(type==='in'?'+ ':'− ')+money(Math.abs(n));
 const compact=n=>{const a=Math.abs(n);let s;if(a>=1e6)s=(a/1e6).toFixed(1).replace(/\.0$/,'')+'м';else if(a>=1e3)s=(a/1e3).toFixed(a>=1e4?0:1).replace(/\.0$/,'')+'к';else s=String(Math.round(a));return (n<0?'−':'+')+s.replace('.',',')};
 const CATS=['Продукты','Транспорт','Развлечения','Вредные траты','Сладости','Товары для дома','Кредиты'];
 const NOCAT='Без категории';
+const RANKS=[[100,'Бездомный'],[500,'Школьник'],[1000,'Студент'],[5000,'Пенсионер'],[10000,'Дворник'],[20000,'Менеджер'],[30000,'Скрудж'],[40000,'Папик'],[50000,'Поп звезда'],[60000,'Рок звезда'],[70000,'Рэпер'],[80000,'Ну накопил...'],[90000,'Почти сотка...'],[100000,'Можно тратить!']];
 const parseAmt=v=>{const n=parseFloat(String(v).replace(/[\s ]/g,'').replace(',','.'));return isFinite(n)?n:NaN};
 
 /* ---------- хранение ---------- */
@@ -393,23 +466,26 @@ const eomOf=t=>{const d=parse(t);return ymd(new Date(d.getFullYear(),d.getMonth(
 function demoData(){
   const ts=todayStr(),t=parse(ts),start=new Date(t.getFullYear(),t.getMonth()-2,1),ops=[];let seed=11;
   const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
-  const pl=[['in',45000,5,'Зарплата'],['in',30000,20,'Аванс'],['out',12000,16,'Платёж по кредиту','Кредиты'],['out',3200,22,'Кредитная карта','Кредиты'],['out',6500,10,'Коммунальные услуги'],['out',700,25,'Интернет'],['out',450,3,'Мобильная связь']];
+  const pl=[['in',45000,5,'Зарплата',undefined,true],['in',30000,20,'Аванс'],['out',12000,16,'Платёж по кредиту','Кредиты'],['out',3200,22,'Кредитная карта','Кредиты'],['out',6500,10,'Коммунальные услуги'],['out',700,25,'Интернет'],['out',450,3,'Мобильная связь']];
   const yest=addDays(ts,-1);
   for(const p of pl){const op={id:uid(),type:p[0],amount:p[1],kind:'plan',repeat:'month',date:ymd(new Date(start.getFullYear(),start.getMonth(),p[2])),note:p[3],cat:p[4],done:[]};
-    for(const d of occurrences(op,yest)){op.done.push(d);ops.push({id:uid(),type:p[0],amount:p[1],kind:'fact',date:d,note:p[3],cat:p[4],fromPlan:true})}
+    if(p[3]==='Зарплата')op.salary=true;
+    for(const d of occurrences(op,yest)){op.done.push(d);const f={id:uid(),type:p[0],amount:p[1],kind:'fact',date:d,note:p[3],cat:p[4],fromPlan:true};if(op.salary)f.salary=true;ops.push(f)}
     ops.push(op)}
   const k=[['Продукты','',500,2600],['Продукты','',400,1800],['Продукты','',300,1200],['Транспорт','Метро',60,200],['Транспорт','Такси',250,700],['Развлечения','Кафе',400,1400],['Развлечения','Кино',450,900],['Вредные траты','Сигареты',200,320],['Вредные траты','',150,300],['Сладости','',90,450],['Сладости','Кофе с пирожным',250,450],['Товары для дома','',300,2200]];
   for(let d=ymd(start);d<=ts;d=addDays(d,1)){const n=rnd()<0.82?(rnd()<0.4?2:1):0;for(let i=0;i<n;i++){const c=k[Math.floor(rnd()*k.length)];ops.push({id:uid(),type:'out',kind:'fact',date:d,amount:Math.round((c[2]+rnd()*(c[3]-c[2]))/10)*10,note:c[1],cat:c[0]})}}
   ops.push({id:uid(),type:'out',kind:'plan',repeat:'none',date:addDays(ts,9),amount:3500,note:'Подарок на день рождения',cat:'Развлечения',done:[]});
-  return{v:2,start:9000,cur:'₽',demo:true,ops};
+  return{v:3,start:9000,cur:'₽',demo:true,ops};
 }
 
 let S=load();
-if(!S||!Array.isArray(S.ops)||(S.demo&&S.v!==2))S=demoData();
-if(S.v!==2){/* старые данные: угадываем категорию по описанию */
+if(!S||!Array.isArray(S.ops)||(S.demo&&S.v!==3))S=demoData();
+if(!S.v||S.v<3){/* доходы с описанием «зарплата» отмечаем как зарплату */
+  for(const o of S.ops)if(o.type==='in'&&/зарплат|з\/п|оклад/i.test(o.note||''))o.salary=true}
+if(!S.v||S.v<2){/* старые данные: угадываем категорию по описанию */
   const guess=[[/продукт|магазин|еда/i,'Продукты'],[/транспорт|такси|метро|автобус|бензин/i,'Транспорт'],[/кредит|займ|рассрочк|ипотек/i,'Кредиты'],[/кафе|кино|ресторан/i,'Развлечения'],[/сигарет|алкогол|пиво/i,'Вредные траты'],[/сладк|конфет|шоколад/i,'Сладости']];
-  for(const o of S.ops)if(o.type==='out'&&!o.cat){const g=guess.find(x=>x[0].test(o.note||''));if(g)o.cat=g[1]}
-  S.v=2}
+  for(const o of S.ops)if(o.type==='out'&&!o.cat){const g=guess.find(x=>x[0].test(o.note||''));if(g)o.cat=g[1]}}
+S.v=3;
 persist();
 
 /* ---------- отрисовка ---------- */
@@ -520,7 +596,56 @@ function renderStats(){
   if(document.activeElement!==$('#cur'))$('#cur').value=S.cur||'₽';
   renderFc();
 }
-function renderAll(){renderToday();renderCal();renderStats()}
+/* ---------- звания ---------- */
+function rankOf(v){let r=-1;for(let i=0;i<RANKS.length;i++)if(v>=RANKS[i][0])r=i;return r}
+const rankName=i=>i<0?'Без звания':RANKS[i][1];
+const tier=i=>i<4?1:i<8?2:i<12?3:4;
+function medal(i,cls,locked){return '<span class="medal'+(i<0||locked?' locked':' t'+tier(i))+(cls?' '+cls:'')+'" aria-hidden="true">'+(i<0?'–':i+1)+'</span>'}
+const hasSalary=()=>S.ops.some(o=>o.type==='in'&&o.salary);
+function salaryResults(){const t=todayStr(),ds=[...new Set(S.ops.filter(o=>o.kind==='fact'&&o.type==='in'&&o.salary&&o.date<=t).map(o=>o.date))].sort();
+  return ds.map(d=>{const v=balanceAt(addDays(d,-1));return{date:d,left:v,rank:rankOf(v)}})}
+function nextSalary(){const t=todayStr(),x=pendingUntil(addDays(t,93)).find(x=>x.op.type==='in'&&x.op.salary&&x.date>=t);return x?x.date:null}
+function salaryToast(date){const v=balanceAt(addDays(date,-1)),r=rankOf(v);return 'Зарплата! Накануне было '+money(v)+', звание «'+rankName(r)+'»'}
+function renderAwards(){
+  const has=hasSalary();$('#awNoSal').hidden=has;$('#awMain').hidden=!has;
+  const res=salaryResults(),hr=$('#heroRank');
+  if(res.length){const l=res[res.length-1];hr.hidden=false;hr.innerHTML='Звание: <b>'+rankName(l.rank)+'</b> <button type="button" data-tab="awards">Все звания →</button>'}else hr.hidden=true;
+  if(!has)return;
+  const t=todayStr(),last=res[res.length-1],best=res.reduce((m,r)=>r.rank>m?r.rank:m,-1);
+  $('#awHero').innerHTML=last
+    ?medal(last.rank)+'<div><div class="k">Звание с последней зарплаты</div><div class="nm">'+rankName(last.rank)+'</div><div class="s">'+fmtLong(last.date)+': накануне на счету было '+money(last.left)+(best>last.rank?'. Лучший результат: '+rankName(best):'')+'</div></div>'
+    :medal(-1)+'<div><div class="k">Звание</div><div class="nm">Пока нет</div><div class="s">Первое звание появится в день зарплаты.</div></div>';
+  const ns=nextSalary(),bal=balanceAt(t);let h='',tgt=best+1;
+  if(ns){
+    const before=addDays(ns,-1),exp=before<t?balanceAt(before):forecast(before).result,er=rankOf(exp),dd=diff(t,ns);tgt=er+1;
+    h+='<b>Следующая зарплата: '+fmtLong(ns)+(dd===0?', сегодня':', через '+dd+' '+plural(dd,'день','дня','дней'))+'</b>';
+    h+='<div class="fc"><div class="fc-line"><span>Сейчас на счету</span><span>'+money(bal)+'</span></div>';
+    if(before>=t)h+='<div class="fc-line"><span>Прогноз накануне зарплаты</span><span class="'+(exp<0?'neg':'')+'">'+money(exp)+'</span></div>';
+    h+='<div class="fc-line"><span>'+(before<t?'Звание за эту зарплату':'Ожидаемое звание')+'</span><span class="rk">'+rankName(er)+'</span></div></div>';
+    if(er+1<RANKS.length){const lo=er<0?0:RANKS[er][0],hi=RANKS[er+1][0],need=hi-exp,pct=Math.max(0,Math.min(100,(exp-lo)/(hi-lo)*100));
+      h+='<div class="prog"><div class="prog-line"><span>До «'+RANKS[er+1][1]+'»</span><span>не хватает '+money(need)+'</span></div><div class="track"><div class="fill" style="width:'+pct.toFixed(1)+'%"></div></div></div>';
+      const days=diff(t,before);if(days>0)h+='<div class="tip">Чтобы стать «'+RANKS[er+1][1]+'», тратьте примерно на <b>'+money(need/days)+'</b> в день меньше обычного до '+fmtLong(before)+' включительно.</div>'}
+    else h+='<div class="tip">Это высшее звание. Так держать!</div>';
+  }else h+='<b>Дата следующей зарплаты неизвестна</b><div class="muted" style="font-size:13.5px">Запланируйте зарплату с повтором каждый месяц и отметкой «Это зарплата», тогда здесь появится прогноз звания.</div><div><button class="btn small" data-add="salary" type="button">Запланировать зарплату</button></div>';
+  $('#awNow').innerHTML=h;
+  const cnt=RANKS.map(()=>0);res.forEach(r=>{if(r.rank>=0)cnt[r.rank]++});
+  $('#awLadder').innerHTML=RANKS.map((r,i)=>'<div class="step'+(i<=best?'':' locked')+(i===tgt?' next':'')+'">'+medal(i,'',i>best)+'<div><div class="nm">'+r[1]+'</div><div class="th">от '+money(r[0])+' накануне зарплаты</div></div><div class="cnt">'+(cnt[i]?'×'+cnt[i]:(i===tgt?'цель':''))+'</div></div>').reverse().join('');
+  $('#awHist').innerHTML=res.length?res.slice().reverse().map(r=>'<div class="hist">'+medal(r.rank,'mini-medal')+'<div><div class="nm">'+rankName(r.rank)+'</div><div class="dt">Зарплата '+fmtLong(r.date)+' '+parse(r.date).getFullYear()+'</div></div><div class="v'+(r.left<0?' neg':'')+'">'+money(r.left)+'</div></div>').join(''):empty('Зарплат пока не было. История появится после первой.');
+}
+function celebrate(d){
+  const res=salaryResults(),e=res.find(x=>x.date===d);if(!e)return;
+  const prev=res.filter(x=>x.date<d).reduce((m,x)=>Math.max(m,x.rank),-1),nx=RANKS[e.rank+1];
+  $('#awMedal').innerHTML=medal(e.rank);
+  if(e.rank<0){$('#awK').textContent='Зарплата получена';$('#awName').textContent='Пока без звания';
+    $('#awText').textContent='Накануне на счету было '+money(e.left)+'. Первое звание даётся от 100 ₽, в следующий раз получится!'}
+  else{$('#awK').textContent=prev<0?'Первое звание!':e.rank>prev?'Новый рекорд!':'Звание за эту зарплату';
+    $('#awName').textContent=RANKS[e.rank][1];
+    $('#awText').textContent='Накануне зарплаты на счету было '+money(e.left)+'.'+(nx?' Следующее звание «'+nx[1]+'» — от '+NF.format(nx[0])+' ₽.':' Выше уже некуда!')}
+  $('#bd').hidden=false;$('#award').hidden=false;
+}
+function closeAward(){$('#award').hidden=true;$('#bd').hidden=true}
+$('#awOk').onclick=closeAward;
+function renderAll(){renderToday();renderCal();renderStats();renderAwards()}
 
 /* ---------- изменения и отмена ---------- */
 let undoSnap=null,toastT=null;
@@ -530,29 +655,31 @@ function toast(msg,canUndo){$('#toastMsg').textContent=msg;$('#toastUndo').hidde
 $('#toastUndo').onclick=()=>{if(undoSnap){S=JSON.parse(undoSnap);undoSnap=null;persist();renderAll()}$('#toast').hidden=true};
 
 function markDone(id,occ){const o=S.ops.find(x=>x.id===id);if(!o)return;snap();const t=todayStr();
-  o.done=o.done||[];o.done.push(occ);const f={id:uid(),type:o.type,amount:o.amount,kind:'fact',date:occ<=t?occ:t,note:o.note,fromPlan:true};if(o.cat)f.cat=o.cat;S.ops.push(f);
-  save((o.type==='in'?'Получено: ':'Оплачено: ')+(o.note||money(o.amount)),true)}
+  o.done=o.done||[];o.done.push(occ);const f={id:uid(),type:o.type,amount:o.amount,kind:'fact',date:occ<=t?occ:t,note:o.note,fromPlan:true};if(o.cat)f.cat=o.cat;if(o.salary)f.salary=true;S.ops.push(f);
+  save(o.salary?salaryToast(f.date):(o.type==='in'?'Получено: ':'Оплачено: ')+(o.note||money(o.amount)),true);
+  if(f.salary)celebrate(f.date)}
 
 /* ---------- лист ввода ---------- */
 let edit=null,ctxOcc=null,delArm=null,curCat=null;
 function setRadio(name,v){document.querySelectorAll('input[name="'+name+'"]').forEach(r=>r.checked=r.value===v)}
 const getRadio=name=>(document.querySelector('input[name="'+name+'"]:checked')||{}).value;
-function updRep(){$('#repWrap').hidden=getRadio('kind')!=='plan';$('#catWrap').hidden=getRadio('type')!=='out'}
+function updRep(){$('#repWrap').hidden=getRadio('kind')!=='plan';$('#catWrap').hidden=getRadio('type')!=='out';$('#salWrap').hidden=getRadio('type')!=='in'}
 function renderCats(){$('#cats').innerHTML=CATS.map(c=>'<button type="button" class="cat'+(c===curCat?' on':'')+'" data-cat="'+esc(c)+'" aria-pressed="'+(c===curCat)+'">'+esc(c)+'</button>').join('')}
 document.querySelectorAll('input[name="type"]').forEach(r=>r.addEventListener('change',updRep));
 function openSheet(o2){
   edit=o2.id?S.ops.find(o=>o.id===o2.id):null;ctxOcc=o2.occ||null;
-  const p=o2.preset,o=edit||{type:p==='in'?'in':'out',kind:p==='plan'?'plan':'fact',date:o2.date||todayStr(),amount:'',note:'',repeat:'none'};
+  const p=o2.preset,o=edit||(p==='salary'?{type:'in',kind:'plan',date:o2.date||todayStr(),amount:'',note:'Зарплата',repeat:'month',salary:true}:{type:p==='in'?'in':'out',kind:p==='plan'?'plan':'fact',date:o2.date||todayStr(),amount:'',note:'',repeat:'none'});
+  $('#fSal').checked=!!o.salary;
   setRadio('type',o.type);setRadio('kind',o.kind);$('#fDate').value=o.date;$('#fAmt').value=o.amount===''?'':String(o.amount).replace('.',',');
   $('#fNote').value=o.note||'';$('#fRep').checked=o.repeat==='month';curCat=o.cat||null;renderCats();updRep();$('#shErr').textContent='';
-  $('#shTitle').textContent=edit?(edit.kind==='plan'?(edit.repeat==='month'?'Ежемесячный план':'Запланировано'):'Операция'):(p==='plan'?'Запланировать':'Новая операция');
+  $('#shTitle').textContent=edit?(edit.kind==='plan'?(edit.repeat==='month'?'Ежемесячный план':'Запланировано'):'Операция'):(p==='salary'?'Зарплата: дата и сумма':p==='plan'?'Запланировать':'Новая операция');
   $('#shDel').hidden=!edit;$('#shDel').textContent=edit&&edit.kind==='plan'&&edit.repeat==='month'?'Удалить всю серию':'Удалить';delArm=null;
   $('#shSkip').hidden=!(edit&&edit.kind==='plan'&&edit.repeat==='month'&&ctxOcc);
   $('#bd').hidden=false;$('#sheet').hidden=false;document.body.style.overflow='hidden';
   if(!edit)setTimeout(()=>{try{$('#fAmt').focus()}catch(e){}},60);
 }
 function closeSheet(){$('#bd').hidden=true;$('#sheet').hidden=true;document.body.style.overflow='';edit=null}
-$('#shClose').onclick=closeSheet;$('#bd').onclick=closeSheet;
+$('#shClose').onclick=closeSheet;$('#bd').onclick=()=>{if(!$('#award').hidden)closeAward();else closeSheet()};
 document.querySelectorAll('input[name="kind"]').forEach(r=>r.addEventListener('change',updRep));
 $('#sheet').addEventListener('submit',e=>{e.preventDefault();
   const amt=parseAmt($('#fAmt').value),date=$('#fDate').value;
@@ -560,10 +687,13 @@ $('#sheet').addEventListener('submit',e=>{e.preventDefault();
   if(!date){$('#shErr').textContent='Выберите дату.';return}
   const kind=getRadio('kind'),data={type:getRadio('type'),kind,date,amount:Math.round(amt*100)/100,note:$('#fNote').value.trim(),repeat:kind==='plan'&&$('#fRep').checked?'month':'none'};
   if(data.type==='out'&&curCat)data.cat=curCat;
+  if(data.type==='in'&&$('#fSal').checked)data.salary=true;
+  const salMsg=data.salary&&kind==='fact'&&date<=todayStr()&&!(edit&&edit.salary&&edit.kind==='fact');
   snap();
-  if(edit){delete edit.cat;const wasPlan=edit.kind==='plan';Object.assign(edit,data);if(kind==='plan'){if(!wasPlan||!edit.done)edit.done=[]}else delete edit.done;if(kind==='fact')delete edit.repeat}
+  if(edit){delete edit.cat;delete edit.salary;const wasPlan=edit.kind==='plan';Object.assign(edit,data);if(kind==='plan'){if(!wasPlan||!edit.done)edit.done=[]}else delete edit.done;if(kind==='fact')delete edit.repeat}
   else{const op=Object.assign({id:uid()},data);if(kind==='plan')op.done=[];else delete op.repeat;S.ops.push(op)}
-  closeSheet();save('Сохранено',true);
+  closeSheet();save(salMsg?salaryToast(date):'Сохранено',true);
+  if(salMsg)celebrate(date);
 });
 $('#shDel').onclick=()=>{if(!edit)return;if(delArm!==edit.id){delArm=edit.id;$('#shDel').textContent='Нажмите ещё раз, чтобы удалить';return}
   snap();S.ops=S.ops.filter(o=>o!==edit);closeSheet();save('Удалено',true)};
@@ -579,7 +709,7 @@ document.addEventListener('click',e=>{
   const tb=e.target.closest('[data-tab]');if(tb){showTab(tb.dataset.tab);return}
   const fc=e.target.closest('[data-fc]');if(fc){fcMode=fc.dataset.fc;renderFc();return}
 });
-function showTab(n){['today','cal','stats'].forEach(k=>{$('#tab-'+k).hidden=k!==n});document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.tab===n));window.scrollTo(0,0)}
+function showTab(n){['today','cal','awards','stats'].forEach(k=>{$('#tab-'+k).hidden=k!==n});document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.tab===n));window.scrollTo(0,0)}
 $('#prev').onclick=()=>{vm--;if(vm<0){vm=11;vy--}sel=vy+'-'+pad(vm+1)+'-01';renderCal()};
 $('#next').onclick=()=>{vm++;if(vm>11){vm=0;vy++}sel=vy+'-'+pad(vm+1)+'-01';renderCal()};
 $('#toToday').onclick=()=>{resetCal();renderCal()};
@@ -592,7 +722,7 @@ $('#setBalBtn').onclick=()=>{const v=parseAmt($('#setBal').value);if(!isFinite(v
 $('#cur').addEventListener('change',()=>{S.cur=$('#cur').value.trim()||'₽';save()});
 
 let wipeArm=false;
-function wipe(){S={v:2,start:0,cur:S.cur||'₽',ops:[]};persist();resetCal();showTab('today');renderAll()}
+function wipe(){S={v:3,start:0,cur:S.cur||'₽',ops:[]};persist();resetCal();showTab('today');renderAll()}
 $('#demoClear').onclick=()=>{snap();wipe();toast('Пример удалён',true)};
 $('#wipe').onclick=()=>{if(!wipeArm){wipeArm=true;$('#wipe').textContent='Нажмите ещё раз — всё будет удалено';setTimeout(()=>{wipeArm=false;$('#wipe').textContent='Удалить все данные'},4000);return}
   wipeArm=false;$('#wipe').textContent='Удалить все данные';snap();wipe();toast('Все данные удалены',true)};
